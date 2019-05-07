@@ -51,14 +51,23 @@ class AfricasTalkingChannel
 
         $response = $this->client->sms()->send($sendable);
 
-        if (!isset($response['data']->SMSMessageData->Recipients)) {
-            return;
+        if (! isset($response['data']->SMSMessageData->Recipients)) {
+            throw CouldNotSendNotification::gatewayException(503);
         }
 
-        foreach ($response['data']->SMSMessageData->Recipients as $response) {
-            // codes 100: Processed, 101: Sent 102: Queued are success status codes
-            if (!in_array($response->statusCode, [100, 101, 102])) {
-                throw CouldNotSendNotification::gatewayException($response->statusCode);
+        $recipients = $response['data']->SMSMessageData->Recipients;
+        $summary = $response['data']->SMSMessageData->Message;
+
+        if (count($recipients)) {
+            foreach ($recipients as $response) {
+                // codes 100: Processed, 101: Sent 102: Queued are success status codes
+                if (! in_array($response->statusCode, [100, 101, 102])) {
+                    throw CouldNotSendNotification::gatewayException($response->statusCode);
+                }
+            }
+        } else {
+            if (isset($summary)) {
+                throw CouldNotSendNotification::gatewayException(402, $summary);
             }
         }
     }
