@@ -1,0 +1,47 @@
+{
+    "name": "m-shule/africastalking",
+    "description": "AfricasTalking notifications driver for Laravel 5.3+",
+    "homepage": "https://github.com/m-shule/africastalking",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "M-Shule",
+            "email": "hello@m-shule.com",
+            "homepage": "https://m-shule.com",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": ">=5.6.4",
+        "africastalking/africastalking": "^2.0",
+        "illuminate/notifications": "^5.3",
+        "illuminate/support": "^5.3"
+    },
+    "require-dev": {
+        "mockery/mockery": "^0.9.5",
+        "phpunit/phpunit": "4.*"
+    },
+    "autoload": {
+        "psr-4": {
+            "MShule\\AfricasTalking\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "MShule\\AfricasTalking\\Test\\": "tests"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "MShule\\AfricasTalking\\AfricasTalkingServiceProvider"
+            ]
+        }
+    },
+    "scripts": {
+        "test": "vendor/bin/phpunit"
+    },
+    "config": {
+        "sort-packages": true
+    }
+}
