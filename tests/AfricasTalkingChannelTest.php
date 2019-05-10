@@ -34,6 +34,7 @@ class AfricasTalkingChannelTest extends PHPUnit_Framework_TestCase
         parent::tearDown();
     }
 
+    /*** @test ***/
     public function it_can_be_instantiated()
     {
         $this->assertInstanceOf(AfricasTalking::class, $this->client);
@@ -41,6 +42,7 @@ class AfricasTalkingChannelTest extends PHPUnit_Framework_TestCase
         $this->assertInstanceOf(AfricasTalkingMessage::class, $this->message);
     }
 
+    /** @test */
     public function it_can_send_a_notification()
     {
     	$notifiable = new TestNotifiable;

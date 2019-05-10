@@ -6,7 +6,8 @@ use MShule\AfricasTalking\AfricasTalkingMessage;
 use PHPUnit_Framework_TestCase;
 
 class AfricasTalkingMessageTest extends PHPUnit_Framework_TestCase
-{   
+{
+    /** @test */
     public function it_can_be_instantiated()
     {
         $message = new AfricasTalkingMessage;
@@ -14,6 +15,7 @@ class AfricasTalkingMessageTest extends PHPUnit_Framework_TestCase
         $this->assertInstanceOf(AfricasTalkingMessage::class, $message);
     }
 
+    /** @test */
     public function it_can_accept_content_when_created()
     {
         $message = new AfricasTalkingMessage('FooBar');
@@ -21,6 +23,7 @@ class AfricasTalkingMessageTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('FooBar', $message->getContent());
     }
 
+    /** @test */
     public function it_supports_create_method()
     {
         $message = AfricasTalkingMessage::create('FooBar');
@@ -29,6 +32,7 @@ class AfricasTalkingMessageTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('FooBar', $message->getContent());
     }
 
+    /** @test */
     public function it_can_set_content()
     {
         $message = (new AfricasTalkingMessage)->content('FooBar');
@@ -36,6 +40,7 @@ class AfricasTalkingMessageTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('FooBar', $message->getContent());
     }
 
+    /** @test */
     public function it_can_set_to()
     {
         $message = (new AfricasTalkingMessage)->to('+254712345678');
@@ -43,6 +48,7 @@ class AfricasTalkingMessageTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('+254712345678', $message->getTo());
     }
 
+    /** @test */
     public function it_can_set_to_from_array()
     {
         $message = (new AfricasTalkingMessage)->to(['+254712345678', '+254712345679', '+254712345680']);
@@ -50,6 +56,7 @@ class AfricasTalkingMessageTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('+254712345678,+254712345679,+254712345680', $message->getTo());
     }
 
+    /** @test */
     public function it_can_set_from()
     {
         $message = (new AfricasTalkingMessage)->from('+254712345678');
@@ -57,6 +64,7 @@ class AfricasTalkingMessageTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('+254712345678', $message->getFrom());
     }
 
+    /** @test */
     public function it_supports_to_json_method()
     {
         $message = new AfricasTalkingMessage;
