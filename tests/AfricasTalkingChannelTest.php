@@ -23,7 +23,7 @@ class AfricasTalkingChannelTest extends PHPUnit_Framework_TestCase
 
 	public function setUp()
     {
-        $this->client = Mockery::mock(new AfricasTalking('sandbox', '29e55fe8ec7ef19dd64daba0d1480d0562ca5a85617e6353d505816646e11e0b'));
+        $this->client = Mockery::mock(new AfricasTalking('sandbox', 'cc5053b1da44cf59a4d7d58caed6965e79498f991f7bac9b6885db594b7baa02'));
         $this->channel = new AfricasTalkingChannel($this->client);
         $this->message = new AfricasTalkingMessage();
     }
@@ -66,6 +66,6 @@ class TestNotification extends Notification
 {
     public function toAfricasTalking($notifiable)
     {
-    	return (new AfricasTalkingMessage())->from('60606')->content('Hello World!');
+    	return (new AfricasTalkingMessage())->content('Hello World!');
     }
 }
