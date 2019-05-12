@@ -37,6 +37,10 @@ class AfricasTalkingChannel
             throw CouldNotSendNotification::missingTo();
         }
 
+        if (is_array($to)) {
+            $to = implode(',', $to);
+        }
+
         $sendable['to'] = $to;
 
         if (! $content = $message->getContent()) {
@@ -51,16 +55,25 @@ class AfricasTalkingChannel
 
         $response = $this->client->sms()->send($sendable);
 
-        if (!isset($response['data']->SMSMessageData->Recipients)) {
-            return;
+        if (! isset($response['data']->SMSMessageData->Recipients) || ! isset($response['data']->SMSMessageData->Message)) {
+            throw CouldNotSendNotification::gatewayException(503);
         }
 
-        foreach ($response['data']->SMSMessageData->Recipients as $response) {
+        $recipients = $response['data']->SMSMessageData->Recipients;
+        $summary = $response['data']->SMSMessageData->Message;
+
+        if(! count($recipients) && isset($summary)) {
+            throw CouldNotSendNotification::gatewayException(402, $summary);
+        }
+
+        if (count($recipients) == 1) {
             // codes 100: Processed, 101: Sent 102: Queued are success status codes
-            if (!in_array($response->statusCode, [100, 101, 102])) {
-                throw CouldNotSendNotification::gatewayException($response->statusCode);
+            if (! in_array($recipients[0]->statusCode, [100, 101, 102])) {
+                throw CouldNotSendNotification::gatewayException($recipients[0]->statusCode);
             }
         }
+        
+        return $recipients;
     }
 
     /**
@@ -76,6 +89,9 @@ class AfricasTalkingChannel
             return $to;
         }
         if ($to = $notifiable->routeNotificationFor('africastalking', $notification)) {
+            if (is_array($to)) {
+                $to = implode(',', $to);
+            }
             return $to;
         }
         if (isset($notifiable->phone)) {
@@ -105,7 +121,7 @@ class AfricasTalkingChannel
         if ($from = $notification->toAfricasTalking($notifiable)->getFrom()) {
             return $from;
         }
-        if ($from = config('services.africastalking.from')) {
+        if (function_exists('config') && $from = config('services.africastalking.from')) {
             return $from;
         }
         return;
