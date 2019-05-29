@@ -4,7 +4,6 @@ namespace MShule\AfricasTalking;
 
 use AfricasTalking\SDK\AfricasTalking;
 use Illuminate\Notifications\Notification;
-use MShule\AfricasTalking\AfricasTalkingMessage;
 use MShule\AfricasTalking\Exceptions\CouldNotSendNotification;
 
 class AfricasTalkingChannel
@@ -19,19 +18,16 @@ class AfricasTalkingChannel
     /**
      * Send the given notification via Africa is Talking.
      *
-     * @param  mixed  $notifiable
-     * @param  \Illuminate\Notifications\Notification  $notification
-     * @return void
+     * @param mixed                                  $notifiable
+     * @param \Illuminate\Notifications\Notification $notification
      */
     public function send($notifiable, Notification $notification)
     {
         $sendable = [];
 
-        if (! $notification->toAfricasTalking($notifiable) instanceof AfricasTalkingMessage) {
+        if (! ($message = $notification->toAfricasTalking($notifiable)) instanceof AfricasTalkingMessage) {
             throw CouldNotSendNotification::invalidMessageObject($message);
         }
-
-        $message = $notification->toAfricasTalking($notifiable);
 
         if (! ($to = $this->getTo($notifiable, $notification))) {
             throw CouldNotSendNotification::missingTo();
@@ -62,25 +58,26 @@ class AfricasTalkingChannel
         $recipients = $response['data']->SMSMessageData->Recipients;
         $summary = $response['data']->SMSMessageData->Message;
 
-        if(! count($recipients) && isset($summary)) {
+        if (! count($recipients) && isset($summary)) {
             throw CouldNotSendNotification::gatewayException(402, $summary);
         }
 
-        if (count($recipients) == 1) {
+        if (1 == count($recipients)) {
             // codes 100: Processed, 101: Sent 102: Queued are success status codes
             if (! in_array($recipients[0]->statusCode, [100, 101, 102])) {
                 throw CouldNotSendNotification::gatewayException($recipients[0]->statusCode);
             }
         }
-        
+
         return $recipients;
     }
 
     /**
      * Get the number to send a notification to.
      *
-     * @param mixed $notifiable
-     * @param  \Illuminate\Notifications\Notification  $notification
+     * @param mixed                                  $notifiable
+     * @param \Illuminate\Notifications\Notification $notification
+     *
      * @return mixed
      */
     protected function getTo($notifiable, Notification $notification)
@@ -92,6 +89,7 @@ class AfricasTalkingChannel
             if (is_array($to)) {
                 $to = implode(',', $to);
             }
+
             return $to;
         }
         if (isset($notifiable->phone)) {
@@ -106,14 +104,16 @@ class AfricasTalkingChannel
         if (isset($notifiable->mobile_number)) {
             return $notifiable->mobile_number;
         }
+
         return;
     }
 
     /**
      * Get the number to send a notification from.
      *
-     * @param mixed $notifiable
-     * @param  \Illuminate\Notifications\Notification  $notification
+     * @param mixed                                  $notifiable
+     * @param \Illuminate\Notifications\Notification $notification
+     *
      * @return mixed
      */
     protected function getFrom($notifiable, Notification $notification)
@@ -124,6 +124,7 @@ class AfricasTalkingChannel
         if (function_exists('config') && $from = config('services.africastalking.from')) {
             return $from;
         }
+
         return;
     }
 }
