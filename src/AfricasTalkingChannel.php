@@ -25,7 +25,7 @@ class AfricasTalkingChannel
     {
         $sendable = [];
 
-        if (! $message = $notification->toAfricasTalking($notifiable) instanceof AfricasTalkingMessage) {
+        if (! ($message = $notification->toAfricasTalking($notifiable)) instanceof AfricasTalkingMessage) {
             throw CouldNotSendNotification::invalidMessageObject($message);
         }
 
