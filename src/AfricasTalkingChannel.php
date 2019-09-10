@@ -121,10 +121,7 @@ class AfricasTalkingChannel
         if ($from = $notification->toAfricasTalking($notifiable)->getFrom()) {
             return $from;
         }
-        if (function_exists('config') && $from = config('services.africastalking.from')) {
-            return $from;
-        }
 
-        return;
+        return config('services.africastalking.from');
     }
 }
