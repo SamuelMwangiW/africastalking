@@ -122,6 +122,6 @@ class AfricasTalkingChannel
             return $from;
         }
 
-        return config('services.africastalking.from');
+        return config('africastalking.from');
     }
 }

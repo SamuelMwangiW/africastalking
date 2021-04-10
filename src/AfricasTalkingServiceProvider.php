@@ -4,29 +4,39 @@ namespace MShule\AfricasTalking;
 
 use AfricasTalking\SDK\AfricasTalking;
 use Illuminate\Support\ServiceProvider;
-use MShule\AfricasTalking\AfricasTalkingChannel;
 use MShule\AfricasTalking\Exceptions\CouldNotSendNotification;
 
 class AfricasTalkingServiceProvider extends ServiceProvider
 {
+    public function register()
+    {
+        $this->mergeConfigFrom(
+            __DIR__ . '/../config/africastalking.php',
+            'africastalking'
+        );
+    }
+
     /**
      * Bootstrap the application services.
      */
     public function boot()
     {
+        $this->publishes([
+            __DIR__ . '/../config/africastalking.php' => config_path('africastalking.php'),
+        ]);
+
         $this->app->when(AfricasTalkingChannel::class)
             ->needs(AfricasTalking::class)
             ->give(function () {
-                $config = config('services.africastalking');
-                if(!$config['api_key']) {
+                if(!config('africastalking.api_key')) {
                     throw CouldNotSendNotification::missingApiKey();
                 }
-                if(!$config['username']) {
+                if(!config('africastalking.username')) {
                     throw CouldNotSendNotification::missingUsername();
                 }
                 return new AfricasTalking(
-                    $config['username'],
-                    $config['api_key']
+                    config('africastalking.username'),
+                    config('africastalking.api_key')
                 );
             });
     }

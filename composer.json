@@ -36,7 +36,10 @@
         "laravel": {
             "providers": [
                 "MShule\\AfricasTalking\\AfricasTalkingServiceProvider"
-            ]
+            ],
+            "aliases": {
+                "AfricastalkingGateway": "AfricasTalkingGateway"
+            }
         }
     },
     "scripts": {
