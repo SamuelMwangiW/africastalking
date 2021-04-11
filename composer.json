@@ -38,7 +38,7 @@
                 "MShule\\AfricasTalking\\AfricasTalkingServiceProvider"
             ],
             "aliases": {
-                "AfricastalkingGateway": "AfricasTalkingGateway"
+                "AfricastalkingGateway": "MShule\\AfricasTalking\\AfricasTalkingGateway"
             }
         }
     },
