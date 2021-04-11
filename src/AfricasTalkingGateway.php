@@ -6,7 +6,7 @@ use AfricasTalking\SDK\AfricasTalking;
 
 class AfricasTalkingGateway
 {
-    private static AfricasTalking $gateway;
+    private AfricasTalking $gateway;
 
     public function __construct(AfricasTalking $gateway)
     {
