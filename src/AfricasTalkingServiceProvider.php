@@ -25,7 +25,7 @@ class AfricasTalkingServiceProvider extends ServiceProvider
             __DIR__ . '/../config/africastalking.php' => config_path('africastalking.php'),
         ]);
 
-        $this->app->when(AfricasTalkingChannel::class)
+        $this->app->when([AfricasTalkingChannel::class,AfricasTalkingGateway::class])
             ->needs(AfricasTalking::class)
             ->give(function () {
                 if(!config('africastalking.api_key')) {
